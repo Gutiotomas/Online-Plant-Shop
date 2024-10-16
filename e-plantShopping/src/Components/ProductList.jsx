@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "./ProductList.css";
 import CartItem from "./CartItem";
-import { addItem } from "./CartSlice";
+import { addItem, selectCartCount, selectCartItems } from "./CartSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 function ProductList() {
+  const dispatch = useDispatch();
+  const cartCount = useSelector(selectCartCount);
+  const cartItems = useSelector(selectCartItems);
   const [showCart, setShowCart] = useState(false);
   const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
   const [addedToCart, setAddedToCart] = useState({});
+
   const handleAddToCart = (product) => {
     dispatch(addItem(product));
     setAddedToCart((prevState) => ({
@@ -263,7 +268,7 @@ function ProductList() {
     padding: "15px",
     display: "flex",
     justifyContent: "space-between",
-    alignIems: "center",
+    alignItems: "center",
     fontSize: "20px",
   };
   const styleObjUl = {
@@ -277,6 +282,7 @@ function ProductList() {
     fontSize: "30px",
     textDecoration: "none",
   };
+
   const handleCartClick = (e) => {
     e.preventDefault();
     setShowCart(true); // Set showCart to true when cart icon is clicked
@@ -287,8 +293,7 @@ function ProductList() {
     setShowCart(false); // Hide the cart when navigating to About Us
   };
 
-  const handleContinueShopping = (e) => {
-    e.preventDefault();
+  const handleContinueShopping = () => {
     setShowCart(false);
   };
   return (
@@ -339,6 +344,7 @@ function ProductList() {
                     id="mainIconPathAttribute"
                   ></path>
                 </svg>
+                {cartCount > 0 && <span>{cartCount}</span>}
               </h1>
             </a>
           </div>

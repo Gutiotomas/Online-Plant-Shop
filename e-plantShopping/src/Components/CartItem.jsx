@@ -7,11 +7,18 @@ const CartItem = ({ onContinueShopping }) => {
   const cart = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
 
+  // Helper function to clean the cost (remove '$' and convert to number)
+  const cleanCost = (cost) => {
+    const numericCost = parseFloat(cost.replace(/[^0-9.-]+/g, "")); // Remove any non-numeric characters
+    return isNaN(numericCost) ? 0 : numericCost;
+  };
+
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
     return cart
       .reduce((total, item) => {
-        return total + item.quantity * item.cost;
+        const itemCost = cleanCost(item.cost);
+        return total + item.quantity * itemCost;
       }, 0)
       .toFixed(2); // Format to two decimal places
   };
@@ -38,7 +45,8 @@ const CartItem = ({ onContinueShopping }) => {
 
   // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {
-    return (item.quantity * item.cost).toFixed(2); // Format to two decimal places
+    const itemCost = cleanCost(item.cost);
+    return (item.quantity * itemCost).toFixed(2); // Format to two decimal places
   };
 
   const handleCheckoutShopping = () => {
@@ -56,7 +64,9 @@ const CartItem = ({ onContinueShopping }) => {
             <img className="cart-item-image" src={item.image} alt={item.name} />
             <div className="cart-item-details">
               <div className="cart-item-name">{item.name}</div>
-              <div className="cart-item-cost">${item.cost.toFixed(2)}</div>
+              <div className="cart-item-cost">
+                ${cleanCost(item.cost).toFixed(2)} {/* Display cleaned cost */}
+              </div>
               <div className="cart-item-quantity">
                 <button
                   className="cart-item-button cart-item-button-dec"
@@ -92,7 +102,10 @@ const CartItem = ({ onContinueShopping }) => {
         className="total_cart_amount"
       ></div>
       <div className="continue_shopping_btn">
-        <button className="get-started-button" onClick={handleContinueShopping}>
+        <button
+          className="get-started-button"
+          onClick={(e) => onContinueShopping(e)}
+        >
           Continue Shopping
         </button>
         <br />
