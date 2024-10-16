@@ -11,8 +11,8 @@
   font-size: 32px;
   font-weight: bold;
   color: #333;
-  margin-left: 10px;
   text-align: center; /* Center the heading */
+  padding: 60px;
 }
 
 .about-us-description {

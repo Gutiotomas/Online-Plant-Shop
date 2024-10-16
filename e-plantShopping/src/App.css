@@ -4,7 +4,6 @@
   padding: 0;
   box-sizing: border-box;
   overflow: hidden;
-  box-sizing: border-box; /* Prevents padding from affecting width */
 }
 
 .landing-page {
@@ -144,5 +143,6 @@
 
   .aboutus_container {
     width: 90%; /* Adjust as needed */
+    margin-top: 10px; /* Reduce space */
   }
 }
