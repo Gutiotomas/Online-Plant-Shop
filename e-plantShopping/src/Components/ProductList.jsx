@@ -20,6 +20,15 @@ function ProductList() {
     }));
   };
 
+  useEffect(() => {
+    // When cartItems update, reset the addedToCart state
+    const updatedAddedToCart = {};
+    cartItems.forEach((item) => {
+      updatedAddedToCart[item.name] = true;
+    });
+    setAddedToCart(updatedAddedToCart);
+  }, [cartItems]);
+
   const plantsArray = [
     {
       category: "Air Purifying Plants",
@@ -276,6 +285,7 @@ function ProductList() {
     justifyContent: "space-between",
     alignItems: "center",
     width: "1100px",
+    paddingLeft: "23%",
   };
   const styleA = {
     color: "white",
@@ -344,7 +354,7 @@ function ProductList() {
                     id="mainIconPathAttribute"
                   ></path>
                 </svg>
-                {cartCount > 0 && <span>{cartCount}</span>}
+                {cartCount >= 0 && <span>{cartCount}</span>}
               </h1>
             </a>
           </div>
@@ -360,18 +370,22 @@ function ProductList() {
               <div className="product-list">
                 {category.plants.map((plant, plantIndex) => (
                   <div className="product-card" key={plantIndex}>
+                    <div className="product-title">{plant.name}</div>
                     <img
                       className="product-image"
                       src={plant.image}
                       alt={plant.name}
                     />
-                    <div className="product-title">{plant.name}</div>
-                    {/*Similarly like the above plant.name show other details like description and cost*/}
+                    <div className="product-price">{plant.cost}</div>
+                    <div className="product-desc">{plant.description}</div>
                     <button
                       className="product-button"
                       onClick={() => handleAddToCart(plant)}
+                      disabled={!!addedToCart[plant.name]} // Disable button if added to cart
                     >
-                      Add to Cart
+                      {addedToCart[plant.name]
+                        ? "Added to Cart"
+                        : "Add to Cart"}
                     </button>
                   </div>
                 ))}
